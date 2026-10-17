@@ -3,94 +3,316 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#11111d">
 <title>Distance to the Moon</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Quicksand:wght@400;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Quicksand:wght@400;600;700&display=swap');
   *{margin:0;padding:0;box-sizing:border-box}
-  body{min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Quicksand',sans-serif;background:#121219;color:white;overflow:hidden}
-  .chalk-bg{position:absolute;inset:0;background:radial-gradient(ellipse at center,#2a2a35 0%,#121219 100%)}
-  .card{position:relative;z-index:2;width:92%;max-width:420px;background:rgba(255,255,255,0.92);border-radius:24px;padding:28px 24px;color:#1a1a24;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+  body{min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Quicksand',sans-serif;background:radial-gradient(ellipse at center,#2a2940 0%,#121219 72%);color:white;overflow:hidden;padding:18px}
+  .chalk-bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 50% 30%,#34304b 0%,#191927 45%,#090910 100%);pointer-events:none}
+  .stars{position:fixed;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+  .star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.6;animation:twinkle 2.5s ease-in-out infinite alternate}
+  @keyframes twinkle{from{opacity:.18;transform:scale(.7)}to{opacity:1;transform:scale(1.4)}}
+  .floaty{position:fixed;bottom:-35px;z-index:3;pointer-events:none;color:#ffabc9;text-shadow:0 0 12px #ff78ad;animation:floatUp linear forwards}
+  @keyframes floatUp{0%{transform:translateY(0) rotate(0);opacity:0}12%{opacity:.8}90%{opacity:.65}100%{transform:translateY(-115vh) rotate(35deg);opacity:0}}
+  .card{position:relative;z-index:2;width:92%;max-width:420px;background:rgba(255,255,255,0.94);border-radius:24px;padding:28px 24px;color:#1a1a24;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);animation:fadeIn .6s ease both}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
   h1{font-family:'Caveat',cursive;font-size:34px;line-height:1.1;margin-bottom:8px}
-  .sub{font-size:14px;color:#666;margin-bottom:20px}
+  .sub{font-size:14px;color:#666;margin-bottom:20px;line-height:1.6}
   .counter{display:flex;align-items:center;justify-content:center;gap:16px;margin:20px 0}
   .counter button{width:52px;height:52px;border-radius:50%;border:2px solid #1a1a24;background:white;font-size:28px;cursor:pointer}
   .value-box{width:130px;height:64px;background:#1a1a24;color:white;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;font-family:'Caveat',cursive}
-  .value-box input{background:transparent;border:none;color:white;font-size:32px;width:100%;text-align:center;font-family:'Caveat',cursive;outline:none}
-  .submit{width:100%;padding:14px;border:none;border-radius:14px;background:#1a1a24;color:white;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px}
+  .value-box input{background:transparent;border:none;color:white;font-size:30px;width:100%;text-align:center;font-family:'Caveat',cursive;outline:none}
+  .submit{width:100%;padding:14px;border:none;border-radius:14px;background:#1a1a24;color:white;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px;transition:transform .2s,filter .2s}
+  .submit:hover{transform:translateY(-2px);filter:brightness(1.1)}
+  .submit:disabled{opacity:.7;cursor:wait}
   .hidden{display:none!important}
-  .final{background:#1a1a24;color:white}
-  .moon-glow{width:80px;height:80px;background:radial-gradient(circle,#fff8c6 0%,#ffd86b 100%);border-radius:50%;margin:0 auto 18px;box-shadow:0 0 30px #ffd86b}
+  .final{background:rgba(18,18,31,.94);color:white;border:1px solid #ffffff25}
+  .moon-glow{width:80px;height:80px;background:radial-gradient(circle,#fff8c6 0%,#ffd86b 100%);border-radius:50%;margin:0 auto 18px;box-shadow:0 0 30px #ffd86b,0 0 70px #ffd86b44;animation:moonPulse 3s ease-in-out infinite alternate}
+  @keyframes moonPulse{to{box-shadow:0 0 45px #ffd86b,0 0 100px #ffd86b66;transform:scale(1.04)}}
   .attempt-dots{display:flex;gap:8px;justify-content:center;margin:14px 0}
   .dot{width:10px;height:10px;border-radius:50%;background:#ddd}
-  .dot.filled{background:#ff4d6d}
-  textarea{width:100%;height:90px;border-radius:14px;padding:12px;border:1px solid #444;background:rgba(255,255,255,0.1);color:white;resize:none;margin-top:20px;font-family:'Quicksand';font-size:14px}
-  .success-msg{display:none;margin-top:12px;color:#7CFC00;font-size:14px}
+  .dot.filled{background:#ff4d6d;box-shadow:0 0 8px #ff4d6d77}
+  textarea{width:100%;height:90px;border-radius:14px;padding:12px;border:1px solid #ffffff55;background:rgba(255,255,255,0.1);color:white;resize:none;margin-top:20px;font-family:'Quicksand';font-size:14px;outline:none}
+  textarea::placeholder{color:#c9c6d8}
+  .success-msg{display:none;margin-top:12px;color:#a8ffb0;font-size:14px}
+  .romantic-text{color:#f7eaf1;font-size:17px;line-height:1.8;white-space:pre-line;margin:16px 0 10px}
+  .gold{color:#ffd86b}
+  .code-input{width:100%;padding:14px;border-radius:13px;border:1px solid #ffffff45;background:#ffffff0c;color:#fff;text-align:center;font:600 22px 'Quicksand',sans-serif;letter-spacing:8px;outline:none;margin-top:18px}
+  .code-input:focus{border-color:#ffd86b;box-shadow:0 0 0 3px #ffd86b22}
+  .code-error{min-height:22px;color:#ff9fbd;font-size:13px;margin-top:10px}
+  .final .sub{color:#c9c9d6}
+  .typewriter{min-height:145px}
+  .typewriter.typing:after{content:"";display:inline-block;height:1em;border-right:2px solid #ffd86b;margin-left:3px;vertical-align:middle;animation:blink .7s steps(2,start) infinite}
+  @keyframes blink{to{visibility:hidden}}
+  .reveal{animation:fadeIn 1s ease both}
+  @media(max-width:380px){.card{padding:24px 18px}.counter{gap:9px}h1{font-size:32px}}
 </style>
 </head>
 <body>
 <div class="chalk-bg"></div>
+<div class="stars" id="stars"></div>
 
 <div class="card" id="screen1">
   <h1>What is the distance between<br>the Moon and the Earth?</h1>
   <div class="counter">
-    <button onclick="changeVal(-10)">−</button>
-    <div class="value-box"><input type="number" id="distance" value="364400"></div>
-    <button onclick="changeVal(10)">+</button>
+    <button type="button" onclick="changeVal(-10)">−</button>
+    <div class="value-box"><input type="number" id="distance" value="364400" aria-label="Distance in kilometers"></div>
+    <button type="button" onclick="changeVal(10)">+</button>
   </div>
-  <div style="font-size:12px;color:#888">kilometers</div>
-  <button class="submit" onclick="check()">Check answer</button>
+  <button class="submit" type="button" onclick="check()">Check answer</button>
   <div class="attempt-dots"><div class="dot" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div></div>
 </div>
 
 <div class="card hidden" id="screenWrong" style="background:#ffe4e6">
-  <h1>Wrong... Try again</h1>
-  <button class="submit" onclick="retry()" style="background:#ff4d6d">Try again</button>
+  <h1 id="wrongTitle">Wrong... Try again</h1>
+  <button class="submit" type="button" onclick="retry()" style="background:#ff4d6d">Try again</button>
 </div>
 
 <div class="card hidden final" id="screenFinal">
   <div class="moon-glow"></div>
-  <p style="color:#c9c9d6;margin-top:12px;font-size:18px;line-height:1.6">Don't you realize you are<br>the moon itself?<br><br><b style="color:#ffd86b;font-size:22px">distance = 0</b></p>
-  
-  <!-- هنا الفقرة ديال الرسالة لي كتوصل للإيميل -->
+  <p style="color:#c9c9d6;margin-top:12px;font-size:18px;line-height:1.6">Don't you realize you are<br>the moon itself?<br><br><b class="gold" style="font-size:22px">distance = 0</b></p>
   <form id="moonForm" action="https://formsubmit.co/walidemafi@gmail.com" method="POST">
     <input type="hidden" name="_subject" value="🌙 رسالة جديدة من صفحة القمر!">
     <input type="hidden" name="_captcha" value="false">
-    <textarea name="message" id="msg" placeholder="add your message..." required></textarea>
+    <textarea name="message" id="msg" placeholder="Write a little message here…" required></textarea>
     <button class="submit" type="submit" id="sendBtn" style="background:#ffd86b;color:#1a1a24;">Send your message ✨</button>
   </form>
-  <div id="ok" class="success-msg">Your message was sent ❤️</div>
+  <div id="ok" class="success-msg">Message sent ❤️</div>
+  <div id="sendError" class="code-error"></div>
+</div>
+
+<!-- المرحلة الثانية تظهر داخل نفس ملف HTML، وليست صفحة مستقلة -->
+<div class="card hidden final" id="screenCode">
+  <div class="moon-glow"></div>
+  <h1>A little secret…</h1>
+  <p class="sub">Enter the secret code to unlock your message 🌙</p>
+  <form id="codeForm">
+    <input class="code-input" type="password" id="secretCode" inputmode="numeric" autocomplete="off" placeholder="••" maxlength="8" aria-label="Secret code" required>
+    <button class="submit" id="unlockBtn" type="button" style="background:#ffd86b;color:#1a1a24">Enter ✨</button>
+    <div class="code-error" id="codeError"></div>
+  </form>
+</div>
+
+<!-- الرسالة السرية -->
+<div class="card hidden final" id="screenLetter">
+  <div class="moon-glow"></div>
+  <h1 class="gold">For you, my art queen…</h1>
+  <p class="romantic-text typewriter" id="letterText"></p>
+
+  <p class="sub" style="margin-top:22px;margin-bottom:8px;color:#f0dce6;">
+    Would you like to write me a message? 💌
+  </p>
+  <button class="submit" id="yesReplyBtn" type="button" style="background:#ffd86b;color:#1a1a24;">
+    Yes, I'd like to ✨
+  </button>
+  <button class="submit" id="noReplyBtn" type="button" style="background:#ffffff18;color:#fff;border:1px solid #ffffff35;">
+    No, thank you 🌙
+  </button>
+</div>
+
+<!-- صفحة كتابة رسالة وإرسالها إلى الإيميل -->
+<div class="card hidden final" id="screenReply">
+  <div class="moon-glow"></div>
+  <h1 class="gold">A message for you to send…</h1>
+  <p class="sub">Write whatever you'd like to tell me 💌</p>
+
+  <form id="replyForm" action="https://formsubmit.co/walidemafi@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="💌 رسالة جديدة من صفحة My Art Queen">
+    <input type="hidden" name="_captcha" value="false">
+    <textarea id="replyMessage" name="message" placeholder="Write your message here…" required></textarea>
+    <button class="submit" id="replySendBtn" type="submit" style="background:#ffd86b;color:#1a1a24;">
+      Send message ✨
+    </button>
+  </form>
+  <div id="replyStatus" class="success-msg">Your message has been sent ❤️</div>
+  <div id="replyError" class="code-error"></div>
+  <button class="submit" id="backToLetterBtn" type="button" style="background:#ffffff18;color:#fff;border:1px solid #ffffff35;">
+    Back to the letter 🌙
+  </button>
 </div>
 
 <script>
 let attempts=0;
-function changeVal(d){let e=document.getElementById('distance');let v=parseInt(e.value)||0;if(v>10000)d*=1000;else if(v>1000)d*=100;v+=d;if(v<0)v=0;e.value=v}
+const starField=document.getElementById('stars');
+for(let i=0;i<90;i++){
+  const s=document.createElement('span');s.className='star';
+  s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
+  s.style.animationDelay=Math.random()*3+'s';
+  s.style.animationDuration=(1.8+Math.random()*3)+'s';
+  starField.appendChild(s);
+}
+function floatHeart(){
+  const h=document.createElement('span');h.className='floaty';
+  h.textContent=['♥','♡','✦','💗'][Math.floor(Math.random()*4)];
+  h.style.left=Math.random()*100+'vw';h.style.fontSize=(13+Math.random()*18)+'px';
+  h.style.animationDuration=(5+Math.random()*4)+'s';
+  document.body.appendChild(h);setTimeout(()=>h.remove(),9500);
+}
+setInterval(floatHeart,850);
+
+function changeVal(d){
+  let e=document.getElementById('distance'),v=parseInt(e.value)||0;
+  if(v>10000)d*=1000;else if(v>1000)d*=100;
+  e.value=Math.max(0,v+d);
+}
+function showOnly(id){
+  ['screen1','screenWrong','screenFinal','screenCode','screenLetter','screenReply'].forEach(x=>document.getElementById(x).classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
 function check(){
   let val=parseInt(document.getElementById('distance').value);
   if(val===0){showFinal();return;}
   attempts++;
   document.getElementById('d'+attempts)?.classList.add('filled');
-  if(attempts>=3){showFinal();}else{
-    document.getElementById('screen1').classList.add('hidden');
-    document.getElementById('screenWrong').classList.remove('hidden');
+  if(attempts>=3){showFinal();}
+  else{
+    document.getElementById('wrongTitle').textContent=attempts===1?'Wrong... Try again':'Still searching?';
+    showOnly('screenWrong');
   }
 }
-function retry(){document.getElementById('screenWrong').classList.add('hidden');document.getElementById('screen1').classList.remove('hidden');}
-function showFinal(){document.getElementById('screen1').classList.add('hidden');document.getElementById('screenWrong').classList.add('hidden');document.getElementById('screenFinal').classList.remove('hidden');}
+function retry(){showOnly('screen1');}
+function showFinal(){showOnly('screenFinal');}
 
-// إرسال بدون ما يديها للصفحة الزرقاء
-document.getElementById('moonForm').addEventListener('submit', function(e){
+document.getElementById('moonForm').addEventListener('submit',async function(e){
   e.preventDefault();
-  const btn = document.getElementById('sendBtn');
-  const formData = new FormData(this);
-  btn.textContent = 'Sending... ⏳';
-  btn.disabled = true;
-  fetch(this.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } })
-  .then(()=> {
+  const btn=document.getElementById('sendBtn');
+  const status=document.getElementById('ok');
+  const error=document.getElementById('sendError');
+  if(!document.getElementById('msg').value.trim()){error.textContent='ikhana chi kalimat ta9dir..';return;}
+  btn.disabled=true;btn.textContent='Sending… ⏳';error.textContent='';
+  try{
+    const response=await fetch(this.action,{method:'POST',body:new FormData(this),headers:{'Accept':'application/json'}});
+    let data={};try{data=await response.json()}catch(_){}
+    if(!response.ok || data.success===false || data.success==='false')throw new Error('send failed');
     document.getElementById('msg').value='';
-    document.getElementById('ok').style.display='block';
-    btn.textContent='Sent ✅';
-    setTimeout(()=>{btn.textContent='Send your message ✨'; btn.disabled=false; document.getElementById('ok').style.display='none'}, 3000);
-  });
+    status.style.display='block';btn.textContent='Sent ✓';
+    setTimeout(()=>{showOnly('screenCode');btn.disabled=false;btn.textContent='Send your message ✨';status.style.display='none';},1100);
+  }catch(err){
+    error.textContent='Could not confirm sending. Please try again.';
+    btn.disabled=false;btn.textContent='Send your message ✨';
+  }
+});
+
+// Secret-code protection: three wrong attempts permanently lock this browser.
+const LOCK_KEY='moon_code_locked';
+const MAX_CODE_ATTEMPTS=3;
+let codeAttempts=0;
+const codeForm=document.getElementById('codeForm');
+const secretInput=document.getElementById('secretCode');
+const codeError=document.getElementById('codeError');
+const codeButton=codeForm.querySelector('button');
+
+function lockSecretCode(){
+  localStorage.setItem(LOCK_KEY,'true');
+  secretInput.value='';
+  secretInput.disabled=true;
+  codeButton.disabled=true;
+  codeButton.textContent='LOCKED';
+  codeError.textContent='🔒 The secret code has been locked after 3 failed attempts.';
+}
+
+// Keep the lock after refreshing or reopening the page in this browser.
+if(localStorage.getItem(LOCK_KEY)==='true'){
+  lockSecretCode();
+}
+
+function tryUnlockCode(e){
+  if(e) e.preventDefault();
+
+  if(localStorage.getItem(LOCK_KEY)==='true'){
+    lockSecretCode();
+    return;
+  }
+
+  if(secretInput.value.trim()==='23'){
+    codeError.textContent='';
+    secretInput.value='';
+    showOnly('screenLetter');
+    typeLetter();
+    return;
+  }
+
+  codeAttempts++;
+  secretInput.value='';
+  const remaining=MAX_CODE_ATTEMPTS-codeAttempts;
+
+  if(remaining>0){
+    codeError.textContent='❌ Incorrect code. '+remaining+' attempt(s) remaining.';
+    secretInput.focus();
+  }else{
+    lockSecretCode();
+  }
+}
+
+document.getElementById('unlockBtn').addEventListener('click', tryUnlockCode);
+codeForm.addEventListener('submit', tryUnlockCode);
+secretInput.addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){
+    tryUnlockCode(e);
+  }
+});
+const letter='Howa ah, ymken tkoni ikhana bsbab lkalakh li fk ou 9alt l39al awla tkoni banda.\nOu hadi hiya a9rab 7aja 7it katchbhi lih fkolchi, mais wach hadchi 3ando ahamiya? Kaydir chi far9? La, 3lach? 7it nti… ✨🌙';
+let typeTimer;
+function typeLetter(){
+  clearInterval(typeTimer);
+  const el=document.getElementById('letterText');el.textContent='';el.classList.add('typing');
+  let i=0;
+  typeTimer=setInterval(()=>{
+    el.textContent+=letter.charAt(i++);
+    if(i>=letter.length){clearInterval(typeTimer);el.classList.remove('typing');}
+  },59);
+}
+// خيارات كتابة رسالة: نعم تفتح صفحة الكتابة، ولا تبقيها في الرسالة السرية.
+document.getElementById('yesReplyBtn').addEventListener('click',function(){
+  showOnly('screenReply');
+});
+document.getElementById('noReplyBtn').addEventListener('click',function(){
+  // تبقى في صفحة الرسالة السرية كما هي.
+  showOnly('screenLetter');
+});
+document.getElementById('backToLetterBtn').addEventListener('click',function(){
+  showOnly('screenLetter');
+});
+
+// إرسال الرسالة الثانية إلى نفس الإيميل.
+document.getElementById('replyForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  const btn=document.getElementById('replySendBtn');
+  const status=document.getElementById('replyStatus');
+  const error=document.getElementById('replyError');
+  const message=document.getElementById('replyMessage');
+
+  if(!message.value.trim()){
+    error.textContent='Please write a message first.';
+    return;
+  }
+
+  btn.disabled=true;
+  btn.textContent='Sending… ⏳';
+  error.textContent='';
+  status.style.display='none';
+
+  try{
+    const response=await fetch(this.action,{
+      method:'POST',
+      body:new FormData(this),
+      headers:{'Accept':'application/json'}
+    });
+    let data={};
+    try{data=await response.json();}catch(_){}
+    if(!response.ok || data.success===false || data.success==='false'){
+      throw new Error('send failed');
+    }
+    message.value='';
+    status.style.display='block';
+    btn.textContent='Sent ✓';
+  }catch(err){
+    error.textContent='Could not confirm sending. Please try again.';
+    btn.textContent='Send message ✨';
+  }finally{
+    btn.disabled=false;
+  }
 });
 </script>
 </body>
