@@ -4,250 +4,94 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Distance to the Moon</title>
-
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Quicksand:wght@400;600&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Quicksand', sans-serif;
-  background: #121219;
-  color: white;
-  overflow: hidden;
-}
-
-.chalk-bg {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at center, #2a2a35 0%, #121219 100%);
-}
-
-.card {
-  position: relative;
-  z-index: 2;
-  width: 92%;
-  max-width: 420px;
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 24px;
-  padding: 28px 24px;
-  color: #1a1a24;
-  text-align: center;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-}
-
-h1 {
-  font-family: 'Caveat', cursive;
-  font-size: 34px;
-  line-height: 1.1;
-  margin-bottom: 8px;
-}
-
-.sub {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 20px;
-}
-
-.counter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin: 20px 0;
-}
-
-.counter button {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: 2px solid #1a1a24;
-  background: white;
-  font-size: 28px;
-  cursor: pointer;
-}
-
-.value-box {
-  width: 130px;
-  height: 64px;
-  background: #1a1a24;
-  color: white;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  font-family: 'Caveat', cursive;
-}
-
-.value-box input {
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 32px;
-  width: 100%;
-  text-align: center;
-  font-family: 'Caveat', cursive;
-  outline: none;
-}
-
-.submit {
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 14px;
-  background: #1a1a24;
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.final {
-  background: #1a1a24;
-  color: white;
-}
-
-.moon-glow {
-  width: 80px;
-  height: 80px;
-  background: radial-gradient(circle, #fff8c6 0%, #ffd86b 100%);
-  border-radius: 50%;
-  margin: 0 auto 18px;
-  box-shadow: 0 0 30px #ffd86b;
-}
-
-.attempt-dots {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin: 14px 0;
-}
-
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #ddd;
-}
-
-.dot.filled {
-  background: #ff4d6d;
-}
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Quicksand:wght@400;600&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Quicksand',sans-serif;background:#121219;color:white;overflow:hidden}
+  .chalk-bg{position:absolute;inset:0;background:radial-gradient(ellipse at center,#2a2a35 0%,#121219 100%)}
+  .card{position:relative;z-index:2;width:92%;max-width:420px;background:rgba(255,255,255,0.92);border-radius:24px;padding:28px 24px;color:#1a1a24;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+  h1{font-family:'Caveat',cursive;font-size:34px;line-height:1.1;margin-bottom:8px}
+  .sub{font-size:14px;color:#666;margin-bottom:20px}
+  .counter{display:flex;align-items:center;justify-content:center;gap:16px;margin:20px 0}
+  .counter button{width:52px;height:52px;border-radius:50%;border:2px solid #1a1a24;background:white;font-size:28px;cursor:pointer}
+  .value-box{width:130px;height:64px;background:#1a1a24;color:white;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;font-family:'Caveat',cursive}
+  .value-box input{background:transparent;border:none;color:white;font-size:32px;width:100%;text-align:center;font-family:'Caveat',cursive;outline:none}
+  .submit{width:100%;padding:14px;border:none;border-radius:14px;background:#1a1a24;color:white;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px}
+  .hidden{display:none!important}
+  .final{background:#1a1a24;color:white}
+  .moon-glow{width:80px;height:80px;background:radial-gradient(circle,#fff8c6 0%,#ffd86b 100%);border-radius:50%;margin:0 auto 18px;box-shadow:0 0 30px #ffd86b}
+  .attempt-dots{display:flex;gap:8px;justify-content:center;margin:14px 0}
+  .dot{width:10px;height:10px;border-radius:50%;background:#ddd}
+  .dot.filled{background:#ff4d6d}
+  textarea{width:100%;height:90px;border-radius:14px;padding:12px;border:1px solid #444;background:rgba(255,255,255,0.1);color:white;resize:none;margin-top:20px;font-family:'Quicksand';font-size:14px}
+  .success-msg{display:none;margin-top:12px;color:#7CFC00;font-size:14px}
 </style>
 </head>
-
 <body>
-
 <div class="chalk-bg"></div>
 
 <div class="card" id="screen1">
   <h1>What is the distance between<br>the Moon and the Earth?</h1>
-
   <div class="counter">
     <button onclick="changeVal(-10)">−</button>
-
-    <div class="value-box">
-      <input type="number" id="distance" value="364400">
-    </div>
-
+    <div class="value-box"><input type="number" id="distance" value="364400"></div>
     <button onclick="changeVal(10)">+</button>
   </div>
-
   <div style="font-size:12px;color:#888">kilometers</div>
-
   <button class="submit" onclick="check()">Check answer</button>
-
-  <div class="attempt-dots">
-    <div class="dot" id="d1"></div>
-    <div class="dot" id="d2"></div>
-    <div class="dot" id="d3"></div>
-  </div>
+  <div class="attempt-dots"><div class="dot" id="d1"></div><div class="dot" id="d2"></div><div class="dot" id="d3"></div></div>
 </div>
 
 <div class="card hidden" id="screenWrong" style="background:#ffe4e6">
   <h1>Wrong... Try again</h1>
-  <button class="submit" onclick="retry()" style="background:#ff4d6d">
-    Try again
-  </button>
+  <button class="submit" onclick="retry()" style="background:#ff4d6d">Try again</button>
 </div>
 
 <div class="card hidden final" id="screenFinal">
   <div class="moon-glow"></div>
-
-  <p style="color:#c9c9d6;margin-top:12px;font-size:18px;line-height:1.6">
-    Don't you realize you are<br>
-    the moon itself?<br><br>
-    <b style="color:#ffd86b;font-size:22px">distance = 0</b>
-  </p>
+  <p style="color:#c9c9d6;margin-top:12px;font-size:18px;line-height:1.6">Don't you realize you are<br>the moon itself?<br><br><b style="color:#ffd86b;font-size:22px">distance = 0</b></p>
+  
+  <!-- هنا الفقرة ديال الرسالة لي كتوصل للإيميل -->
+  <form id="moonForm" action="https://formsubmit.co/walidemafi@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="🌙 رسالة جديدة من صفحة القمر!">
+    <input type="hidden" name="_captcha" value="false">
+    <textarea name="message" id="msg" placeholder="chi kalimat ta9dir 3la had ibda3 ikhana !" required></textarea>
+    <button class="submit" type="submit" id="sendBtn" style="background:#ffd86b;color:#1a1a24;">Send your message ✨</button>
+  </form>
+  <div id="ok" class="success-msg">Your message was sent ❤️</div>
 </div>
 
 <script>
-let attempts = 0;
-
-function changeVal(d) {
-  let e = document.getElementById('distance');
-  let v = parseInt(e.value) || 0;
-
-  if (v > 10000) {
-    d *= 1000;
-  } else if (v > 1000) {
-    d *= 100;
-  }
-
-  v += d;
-
-  if (v < 0) {
-    v = 0;
-  }
-
-  e.value = v;
-}
-
-function check() {
-  let val = parseInt(document.getElementById('distance').value);
-
-  if (val === 0) {
-    showFinal();
-    return;
-  }
-
+let attempts=0;
+function changeVal(d){let e=document.getElementById('distance');let v=parseInt(e.value)||0;if(v>10000)d*=1000;else if(v>1000)d*=100;v+=d;if(v<0)v=0;e.value=v}
+function check(){
+  let val=parseInt(document.getElementById('distance').value);
+  if(val===0){showFinal();return;}
   attempts++;
-
-  document.getElementById('d' + attempts)?.classList.add('filled');
-
-  if (attempts >= 3) {
-    showFinal();
-  } else {
+  document.getElementById('d'+attempts)?.classList.add('filled');
+  if(attempts>=3){showFinal();}else{
     document.getElementById('screen1').classList.add('hidden');
     document.getElementById('screenWrong').classList.remove('hidden');
   }
 }
+function retry(){document.getElementById('screenWrong').classList.add('hidden');document.getElementById('screen1').classList.remove('hidden');}
+function showFinal(){document.getElementById('screen1').classList.add('hidden');document.getElementById('screenWrong').classList.add('hidden');document.getElementById('screenFinal').classList.remove('hidden');}
 
-function retry() {
-  document.getElementById('screenWrong').classList.add('hidden');
-  document.getElementById('screen1').classList.remove('hidden');
-}
-
-function showFinal() {
-  document.getElementById('screen1').classList.add('hidden');
-  document.getElementById('screenWrong').classList.add('hidden');
-  document.getElementById('screenFinal').classList.remove('hidden');
-}
+// إرسال بدون ما يديها للصفحة الزرقاء
+document.getElementById('moonForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const btn = document.getElementById('sendBtn');
+  const formData = new FormData(this);
+  btn.textContent = 'Sending... ⏳';
+  btn.disabled = true;
+  fetch(this.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } })
+  .then(()=> {
+    document.getElementById('msg').value='';
+    document.getElementById('ok').style.display='block';
+    btn.textContent='Sent ✅';
+    setTimeout(()=>{btn.textContent='Send your message ✨'; btn.disabled=false; document.getElementById('ok').style.display='none'}, 3000);
+  });
+});
 </script>
-
 </body>
 </html>
