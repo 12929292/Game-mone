@@ -261,7 +261,7 @@ function typeLetter(){
   typeTimer=setInterval(()=>{
     el.textContent+=letter.charAt(i++);
     if(i>=letter.length){clearInterval(typeTimer);el.classList.remove('typing');}
-  },59);
+  },85);
 }
 // خيارات كتابة رسالة: نعم تفتح صفحة الكتابة، ولا تبقيها في الرسالة السرية.
 document.getElementById('yesReplyBtn').addEventListener('click',function(){
